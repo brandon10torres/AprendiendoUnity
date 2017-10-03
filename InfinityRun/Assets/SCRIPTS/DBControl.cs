@@ -12,6 +12,7 @@ public class DBControl : MonoBehaviour {
 		getRanking
 	};
 	public tipoAccionBD queAccionRelizarBD = tipoAccionBD.checkUsuario;
+	public GameObject gameObjectRespuesta;
 
 
 
@@ -27,7 +28,7 @@ public class DBControl : MonoBehaviour {
 		
 	}
 
-	public IEnumerator ConnectBD(tipoAccionBD tipoConexionBD)
+	public IEnumerator ConnectBD(tipoAccionBD tipoConexionBD, string usuarioCheck = "")
 	{
 		WWWForm form = new WWWForm ();
 
@@ -35,7 +36,7 @@ public class DBControl : MonoBehaviour {
 		{
 			case tipoAccionBD.checkUsuario:
 			{
-				form.AddField ("usuarioCheck", "usuario");
+				form.AddField ("usuarioCheck", usuarioCheck);
 				break;
 			}
 			case tipoAccionBD.insertPuntos:
@@ -61,10 +62,12 @@ public class DBControl : MonoBehaviour {
 			print ("ERROR " + llamadaBD.error);
 		}
 
-		if(llamadaBD.text != "")
+		/*if(llamadaBD.text != "")
 		{
 			print ("Respuesta de BD: " + llamadaBD.text);
-		}
+		}*/
+
+		gameObjectRespuesta.SendMessage ("respuestaBD", llamadaBD.text);
 
 	}
 

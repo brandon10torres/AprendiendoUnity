@@ -10,10 +10,12 @@ public class UILogin : MonoBehaviour {
 	public Text mensajeUsuario;
 
 	public float tiempoMensajes = 3.0f;
+	public DBControl myDB;
 
-	public string[] mensajes = 
+	private string[] mensajes = 
 	{
-		"El usuuario debe contener 5 o más caracteres"
+		"El usuuario debe contener 5 o más caracteres",
+		"El usuario ya existe, intenta con otro"
 	};
 
 
@@ -21,6 +23,7 @@ public class UILogin : MonoBehaviour {
 
 	void Awake()
 	{
+		//PlayerPrefs.SetString ("usuarioInfinityRun", "");
 		string posibleusuario = PlayerPrefs.GetString ("usuarioInfinityRun", "");
 		if (posibleusuario != "") 
 		{
@@ -48,6 +51,20 @@ public class UILogin : MonoBehaviour {
 		
 	}
 
+	void respuestaBD(string mensaje)
+	{
+		if(mensaje == "YaExiste")
+		{
+			MostrarMensajeUsuario (1);
+		}
+		else
+		{
+			estaticasApp.usuario = usuInsertado;
+			PlayerPrefs.SetString ("usuarioInfinityRun", usuInsertado);
+			SceneManager.LoadScene("EscenaBienvenida");
+		}
+	}
+
 	public void exitApp()
 	{
 		Application.Quit ();
@@ -61,9 +78,8 @@ public class UILogin : MonoBehaviour {
 		else 
 		{
 			usuInsertado = usuarioIngresado.text;
-			estaticasApp.usuario = usuInsertado;
-			PlayerPrefs.SetString ("usuarioInfinityRun", usuInsertado);
-			SceneManager.LoadScene("EscenaBienvenida");
+			StartCoroutine (myDB.ConnectBD(DBControl.tipoAccionBD.checkUsuario, usuInsertado));
+
 		}
 	}
 
