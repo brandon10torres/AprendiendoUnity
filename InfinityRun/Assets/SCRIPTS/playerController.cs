@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class playerController : MonoBehaviour {
 
@@ -17,6 +18,7 @@ public class playerController : MonoBehaviour {
 	public UIControl myUI;
 	public GameObject panelRestart;
 	public DBControl myBD;
+	public Text txtPosicion;
 
 
 	private float _vida = 100;
@@ -144,6 +146,28 @@ public class playerController : MonoBehaviour {
 	{
 		panelRestart.SetActive (true);
 		Time.timeScale = 0;
+
+		int puntuacionMax = PlayerPrefs.GetInt ("maxScore", 0);
+		if(puntuacionMax <= _coins)
+		{
+			StartCoroutine (myBD.ConnectBD(DBControl.tipoAccionBD.insertPuntos, estaticasApp.usuario, _coins));
+			PlayerPrefs.SetInt ("maxScore", _coins);
+		}
+		//StartCoroutine (myBD.ConnectBD (DBControl.tipoAccionBD.getRanking));
+	}
+
+	void respuestaBDR(string mensaje)
+	{
+		string[] bestPlayers = mensaje.Split ('#');
+		int miPosicion = 100;
+		for(int i = 0; i < bestPlayers.Length; i++)
+		{
+			if(bestPlayers[i] == estaticasApp.usuario)
+			{
+				miPosicion = i + 1;
+			}
+		}
+		txtPosicion.text = "Tu posición es: " + miPosicion.ToString ();
 	}
 
 

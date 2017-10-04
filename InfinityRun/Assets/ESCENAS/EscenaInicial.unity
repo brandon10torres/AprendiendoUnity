@@ -706,8 +706,6 @@ MonoBehaviour:
   mensajeUsuario: {fileID: 490216825}
   tiempoMensajes: 3
   myDB: {fileID: 1553518955}
-  mensajes:
-  - "El usuuario debe contener 4 o m\xE1s caracteres"
 --- !u!4 &714426364
 Transform:
   m_ObjectHideFlags: 0

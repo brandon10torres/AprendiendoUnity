@@ -6,17 +6,13 @@
 	$db = 'cursoudemy';
 	$nombreTabla = 'infinityrun';
 	$conexion = mysqli_connect($host, $user, $pass, $db) or die('No se puede conectar ' . mysql_error());
-	
-	$usuarioCheck = $_REQUEST['usuarioCheck'];
-	$resultadoLogin = LoginUsuario($conexion, $nombreTabla, $usuarioCheck);
-	echo $resultadoLogin;
 
 	//InsertarElemento($conexion, $nombreTabla);
 	//SeleccionarElementos($conexion, $nombreTabla);
 	//BorrarElementos($conexion, $nombreTabla);
 	//ActualizarElementos($conexion, $nombreTabla);
 
-	/*$tipoLlamadaBD = $_REQUEST['tipoLlamadaBD'];
+	$tipoLlamadaBD = $_REQUEST['tipoLlamadaBD'];
 
 	if($tipoLlamadaBD == "checkUsuario")
 	{
@@ -34,7 +30,7 @@
 	{
 		$infoRank = ObtenerRanking($conexion, $nombreTabla);
 		echo $infoRank;
-	}*/
+	}
 
 
 
@@ -106,6 +102,7 @@
 		$ultimaJugada = $dia . "/" . $mes . "/" . $anio;
 
 		$queryUpdate = "update " . $nombreTabla . " set Puntuacion = " . $puntuacionUsuario . ", UltimaVezJugado = '" . $ultimaJugada . "' where Usuario ='" . $usuarioCheck . "'";
+		//prueba
 		$resultadoUpdate = mysqli_query($conexion, $queryUpdate) or die('La consulta falló ' . mysql_error());
 		echo "Actualizado";
 	}
@@ -122,7 +119,7 @@
 		while($i < $numResultados)
 		{
 			$fila = mysqli_fetch_array($resultadoSelect);
-			$infoRanking = $infoRanking + $fila['Usuario'] . " # ";
+			$infoRanking = $infoRanking . $fila['Usuario'] . "#";
 			$i++;
 		}
 		return $infoRanking;

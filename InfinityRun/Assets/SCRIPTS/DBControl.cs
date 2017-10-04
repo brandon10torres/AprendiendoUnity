@@ -16,6 +16,7 @@ public class DBControl : MonoBehaviour {
 
 
 
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -28,24 +29,56 @@ public class DBControl : MonoBehaviour {
 		
 	}
 
-	public IEnumerator ConnectBD(tipoAccionBD tipoConexionBD, string usuarioCheck = "")
+	public IEnumerator ConnectBD(tipoAccionBD tipoConexionBD, string usuarioCheck = "", int puntosUsurio = 0)
 	{
 		WWWForm form = new WWWForm ();
+
+
+
+
+
 
 		switch (tipoConexionBD) 
 		{
 			case tipoAccionBD.checkUsuario:
 			{
+				form.AddField ("tipoLlamadaBD", "checkUsuario");
 				form.AddField ("usuarioCheck", usuarioCheck);
+				WWW llamadaBD = new WWW (URL, form);
+				yield return llamadaBD;
+
+				if(!string.IsNullOrEmpty(llamadaBD.error))
+				{
+					print ("ERROR " + llamadaBD.error);
+				}
+				gameObjectRespuesta.SendMessage ("respuestaBD", llamadaBD.text);
 				break;
 			}
 			case tipoAccionBD.insertPuntos:
 			{
-				form.AddField ("puntuacionUsuario", 100);
+				form.AddField ("tipoLlamadaBD", "insertPuntos");
+				form.AddField ("usuarioCheck", usuarioCheck);
+				form.AddField ("puntuacionUsuario", puntosUsurio);
+				WWW llamadaBD2 = new WWW (URL, form);
+				yield return llamadaBD2;
+
+				if(!string.IsNullOrEmpty(llamadaBD2.error))
+				{
+					print ("ERROR " + llamadaBD2.error);
+				}
 				break;
 			}
 			case tipoAccionBD.getRanking:
 			{
+				/*form.AddField ("tipoLlamadaBD", "getRanking");
+				WWW llamadaBD3 = new WWW (URL, form);
+				yield return llamadaBD3;
+
+				if(!string.IsNullOrEmpty(llamadaBD3.error))
+				{
+					print ("ERROR " + llamadaBD3.error);
+				}
+				gameObjectRespuesta.SendMessage ("respuestaBDR", llamadaBD3.text);*/
 				break;
 			}
 			default:
@@ -54,20 +87,15 @@ public class DBControl : MonoBehaviour {
 			}
 		}
 
-		WWW llamadaBD = new WWW (URL, form);
-		yield return llamadaBD;
 
-		if(!string.IsNullOrEmpty(llamadaBD.error))
-		{
-			print ("ERROR " + llamadaBD.error);
-		}
 
 		/*if(llamadaBD.text != "")
 		{
 			print ("Respuesta de BD: " + llamadaBD.text);
 		}*/
 
-		gameObjectRespuesta.SendMessage ("respuestaBD", llamadaBD.text);
+
+		//gameObjectRespuesta.SendMessage ("respuestaBD", llamadaBD.text);
 
 	}
 
